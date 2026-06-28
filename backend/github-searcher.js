@@ -85,13 +85,15 @@ async function githubFetch(url) {
     const remaining = response.headers.get("x-ratelimit-remaining");
     const reset = response.headers.get("x-ratelimit-reset");
     throw new Error(
-      `GitHub rate limit hit (remaining: ${remaining}, reset: ${reset})`
+      `GitHub rate limit hit (remaining: ${remaining}, reset: ${reset})`,
     );
   }
 
   if (!response.ok) {
     const body = await response.text();
-    throw new Error(`GitHub API error ${response.status}: ${body.slice(0, 200)}`);
+    throw new Error(
+      `GitHub API error ${response.status}: ${body.slice(0, 200)}`,
+    );
   }
 
   return response.json();
@@ -193,7 +195,7 @@ function getPushedSinceDate() {
 function buildSearchQuery(keyword) {
   const trimmed = keyword.trim();
   const pushedSince = getPushedSinceDate();
-  return `"${trimmed}" in:name,description stars:${MIN_STARS}..${MAX_STARS} fork:false pushed:>${pushedSince}`;
+  return `${trimmed} in:name,description stars:${MIN_STARS}..${MAX_STARS} fork:false pushed:>${pushedSince}`;
 }
 
 async function searchRepositories(keyword, page = 1) {
@@ -273,7 +275,7 @@ class GitHubSearcher {
       const seen = storage.readSeenSet();
 
       const knownUrls = new Set(
-        existing.map((entry) => storage.normalizeUrl(entry.websitelink))
+        existing.map((entry) => storage.normalizeUrl(entry.websitelink)),
       );
 
       for (const repo of result.items || []) {

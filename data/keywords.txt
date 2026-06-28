@@ -1,10 +1,31 @@
 portfolio
+personal portfolio
 developer portfolio
-personal website
-portfolio site
-my portfolio
-frontend portfolio
+designer portfolio
+web portfolio
+resume
+resume website
+cv
+cv website
+homepage
+personal homepage
+personal site
+developer website
+designer website
+developer
+designer
+creative developer
+frontend developer
+full stack developer
 react portfolio
-nextjs portfolio
+react developer portfolio
+next portfolio
+next.js portfolio
 vue portfolio
-design portfolio
+astro portfolio
+svelte portfolio
+developerfolio
+devfolio
+portfolio template
+ux portfolio
+ui ux portfolio
