@@ -30,6 +30,14 @@ const SKIP_HOSTS = new Set([
   "dev.to",
   "codepen.io",
   "codesandbox.io",
+  "stackblitz.com",
+  "www.stackblitz.com",
+  "replit.com",
+  "www.replit.com",
+  "glitch.me",
+  "www.glitch.me",
+  "gitpod.io",
+  "www.gitpod.io",
   "stackoverflow.com",
   "reddit.com",
   "www.reddit.com",
@@ -45,6 +53,11 @@ const SKIP_HOSTS = new Set([
   "coveralls.io",
   "codeclimate.com",
   "www.codeclimate.com",
+  "github-readme-stats.vercel.app",
+  "github-readme-stats-sigma-five.vercel.app",
+  "github-readme-streak-stats.herokuapp.com",
+  "github-readme-stats.shion.dev",
+  "readme-typing-svg.herokuapp.com",
 ]);
 
 const SKIP_URL_PATTERNS = [
@@ -52,6 +65,15 @@ const SKIP_URL_PATTERNS = [
   /utm_campaign=/i,
   /\/badges?\//i,
   /img\.shields\.io/i,
+  /github-readme-(stats|streak-stats)/i,
+  /readme-typing-svg/i,
+  /\/api\/top-langs\b/i,
+  /[?&]layout=compact\b/i,
+  /https?:\/\/(localhost|127\.0\.0\.1|0\.0\.0\.0)(:\d+)?\b/i,
+  /\/(docs|documentation)(\/|$)/i,
+  /\/(swagger|swagger-ui)(\/|$)/i,
+  /\/(redoc|openapi)(\/|$)/i,
+  /\/api(\/|$)/i,
   /\.(jpg|jpeg|png|gif|svg|webp)(\?|$)/i,
 ];
 

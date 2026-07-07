@@ -6,9 +6,9 @@ const FOUND_FILE = path.join(DATA_DIR, "found_websites.txt");
 const SEEN_FILE = path.join(DATA_DIR, "seen_websites.txt");
 const MAIN_FILE = path.join(DATA_DIR, "main_websites.txt");
 const KEYWORDS_FILE = path.join(DATA_DIR, "keywords.txt");
+const GENERATED_KEYWORDS_FILE = path.join(DATA_DIR, "generated_keywords.txt");
 
-const CSV_HEADER =
-  "githubuser,githublink,websitelink,starnumber,mainlangused";
+const CSV_HEADER = "githubuser,githublink,websitelink,starnumber,mainlangused";
 
 function ensureDataFiles() {
   if (!fs.existsSync(DATA_DIR)) {
@@ -19,7 +19,7 @@ function ensureDataFiles() {
     fs.writeFileSync(FOUND_FILE, CSV_HEADER + "\n", "utf8");
   }
 
-  for (const file of [SEEN_FILE, MAIN_FILE]) {
+  for (const file of [SEEN_FILE, MAIN_FILE, GENERATED_KEYWORDS_FILE]) {
     if (!fs.existsSync(file)) {
       fs.writeFileSync(file, "", "utf8");
     }
@@ -94,8 +94,7 @@ function readFoundWebsites() {
   const lines = readLines(FOUND_FILE);
   if (lines.length === 0) return [];
 
-  const startIndex =
-    lines[0].toLowerCase().startsWith("githubuser,") ? 1 : 0;
+  const startIndex = lines[0].toLowerCase().startsWith("githubuser,") ? 1 : 0;
 
   const entries = [];
   for (let i = startIndex; i < lines.length; i++) {
@@ -121,8 +120,7 @@ function readMainWebsites() {
   const lines = readLines(MAIN_FILE);
   if (lines.length === 0) return [];
 
-  const startIndex =
-    lines[0].toLowerCase().startsWith("githubuser,") ? 1 : 0;
+  const startIndex = lines[0].toLowerCase().startsWith("githubuser,") ? 1 : 0;
 
   const entries = [];
   for (let i = startIndex; i < lines.length; i++) {
@@ -140,8 +138,26 @@ function readMainWebsites() {
   return entries;
 }
 
-function readKeywords() {
+function readManualKeywords() {
   return readLines(KEYWORDS_FILE);
+}
+
+function readGeneratedKeywords() {
+  return readLines(GENERATED_KEYWORDS_FILE);
+}
+
+function readKeywords() {
+  return [...new Set([...readManualKeywords(), ...readGeneratedKeywords()])];
+}
+
+function writeGeneratedKeywords(keywords) {
+  const unique = [
+    ...new Set(
+      (keywords || []).map((keyword) => keyword.trim()).filter(Boolean),
+    ),
+  ];
+  const content = unique.length ? unique.join("\n") + "\n" : "";
+  fs.writeFileSync(GENERATED_KEYWORDS_FILE, content, "utf8");
 }
 
 function appendFoundWebsite(entry) {
@@ -161,7 +177,7 @@ function addToMain(entry) {
   const existing = readMainWebsites();
   const normalized = normalizeUrl(entry.websitelink);
   const alreadyAdded = existing.some(
-    (item) => normalizeUrl(item.websitelink) === normalized
+    (item) => normalizeUrl(item.websitelink) === normalized,
   );
   if (alreadyAdded) return;
 
@@ -193,7 +209,7 @@ function getStats() {
   const seen = readSeenSet();
   const main = readMainWebsites();
   const pending = found.filter(
-    (entry) => !seen.has(normalizeUrl(entry.websitelink))
+    (entry) => !seen.has(normalizeUrl(entry.websitelink)),
   ).length;
 
   return {
@@ -207,6 +223,9 @@ function getStats() {
 module.exports = {
   ensureDataFiles,
   readKeywords,
+  readManualKeywords,
+  readGeneratedKeywords,
+  writeGeneratedKeywords,
   readFoundWebsites,
   readSeenSet,
   readMainWebsites,
